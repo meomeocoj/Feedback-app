@@ -1,4 +1,6 @@
-export const FeedBackData = [
+import {IFeedback} from '../context/FeedbackContext'
+
+export const FeedBackData:Array<IFeedback> = [
     {
         id: 1,
         rating: 10,

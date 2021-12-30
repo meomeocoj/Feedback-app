@@ -1,12 +1,9 @@
-import React from 'react'
-interface Props{
-    feedback:Array<{
-        id: number,
-        rating:number,
-        text:string
-    }>
-}
-const FeedbackStats = ({feedback}:Props) => {
+import {useContext} from 'react'
+import FeedbackContext from '../context/FeedbackContext'
+
+const FeedbackStats = () => {
+    const {feedback} = useContext(FeedbackContext)
+
     let average:any = feedback.reduce((acc, cur) => {
         return acc + cur.rating
     },0) / feedback.length | 0.0

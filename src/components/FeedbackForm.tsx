@@ -1,16 +1,25 @@
 import Card from './shared/Card'
-import React, { ChangeEvent, FormEventHandler, useState } from 'react'
+import React, { ChangeEvent , useState } from 'react'
 import Button from './shared/Button'
 import RatingSelect from './RatingSelect'
+import { useContext, useEffect } from 'react'
+import FeedbackContext from '../context/FeedbackContext'
 
-interface FeedbackFormProps{
-    handleAdd:Function
-}
-const FeedbackForm = ({handleAdd}:FeedbackFormProps) => {
-    const [text, setText] = useState<string>('')
+const FeedbackForm = () => {
+    const {addFeedback, feedbackEdit} = useContext(FeedbackContext)
+    const [text, setText] = useState('')
     const [rating, setRating] = useState<number>(10)
     const [btnDisabled, setBtnDisabled] = useState(true)
     const [message, setMessage] = useState<string|null>('')
+
+    useEffect(() => {
+        if(feedbackEdit.edit === true){
+            setBtnDisabled(false)
+            setText(feedbackEdit.item.text)
+            setRating(feedbackEdit.item.rating)
+        } 
+    },[feedbackEdit])
+
     const handleTextChange = (e:ChangeEvent<HTMLInputElement>) : void => {
         const {target:{value}} = e
 
@@ -27,6 +36,7 @@ const FeedbackForm = ({handleAdd}:FeedbackFormProps) => {
         
         setText(e.target.value)
     }
+
     const handleSubmit = (e:React.SyntheticEvent) :void => {
         e.preventDefault()
         if(text.trim().length > 10){
@@ -34,7 +44,7 @@ const FeedbackForm = ({handleAdd}:FeedbackFormProps) => {
                 text,
                 rating
             }
-            handleAdd(newFeedback)
+            addFeedback(newFeedback)
             setText('')
         }
     }
@@ -45,7 +55,7 @@ const FeedbackForm = ({handleAdd}:FeedbackFormProps) => {
                 <h2>How would you rate your service with us? </h2>
                     <RatingSelect select={(rating:number) => setRating(rating)}/>
                     <div className="input-group">
-                        <input onChange={handleTextChange} type="text" placeholder='Write a review' />
+                        <input onChange={handleTextChange} type="text" placeholder='Write a review' value={text}/>
                         <Button type="submit" version='secondary' isDisabled={btnDisabled}>Send</Button>
                     </div>
                 {message && <div className='message'>{message}</div>}

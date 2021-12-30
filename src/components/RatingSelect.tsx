@@ -1,4 +1,6 @@
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
+import {useContext} from 'react'
+import FeedbackContext from '../context/FeedbackContext' 
 
 interface RatingSelectProps{
     select:Function
@@ -6,6 +8,13 @@ interface RatingSelectProps{
 
 const RatingSelect = ({select}:RatingSelectProps) => {
     const [selected, setSelected] = useState(10)
+    const {feedbackEdit} = useContext(FeedbackContext)
+
+    useEffect(()=>{
+        if(feedbackEdit.edit === true){
+            setSelected(feedbackEdit.item.rating)
+        }
+    },[feedbackEdit])
     const handleChange = (e:ChangeEvent<HTMLInputElement>)=>{
         setSelected(+e.currentTarget.value)
         select(+e.currentTarget.value)

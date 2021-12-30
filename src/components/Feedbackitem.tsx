@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
 import Card from "./shared/Card"
-import {FaTimes} from 'react-icons/fa'
+import {FaTimes, FaEdit} from 'react-icons/fa'
+import {useContext} from 'react'
+import FeedbackContext from '../context/FeedbackContext'
 interface FeedbackitemProps{
     item:{
         id:number,
@@ -11,11 +12,8 @@ interface FeedbackitemProps{
 }
 
 const Feedbackitem = ({item, handleDelete}:Required<FeedbackitemProps>) => {
-    
+    const {editFeedback} = useContext(FeedbackContext)
     // event handle
-    const handleClick = (id:number) => {
-
-    }
     return (
         <>
             <Card>
@@ -24,6 +22,9 @@ const Feedbackitem = ({item, handleDelete}:Required<FeedbackitemProps>) => {
             </div>
             <button className="close" onClick={() => handleDelete(item.id)}>
                 <FaTimes color='purple'/>
+            </button>
+            <button className="edit">
+                <FaEdit color='purple'onClick={() => editFeedback(item)}/>
             </button>          
             <div className="text-display">
                 {item.text}
